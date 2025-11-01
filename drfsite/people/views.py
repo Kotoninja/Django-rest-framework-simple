@@ -10,3 +10,13 @@ from django.core.exceptions import ObjectDoesNotExist
 class PeopleListCreateAPI(generics.ListCreateAPIView):
     queryset = People.objects.all()
     serializer_class = PeopleSerializer
+
+
+class PeopleAPIUpdate(generics.UpdateAPIView):
+    queryset = People.objects.all()
+    serializer_class = PeopleSerializer
+
+
+class PeopleAPIDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = People.objects.all()
+    serializer_class = PeopleSerializer
