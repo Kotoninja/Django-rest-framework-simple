@@ -5,18 +5,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.forms import model_to_dict
 from django.core.exceptions import ObjectDoesNotExist
+from rest_framework import viewsets
 
-
-class PeopleListCreateAPI(generics.ListCreateAPIView):
-    queryset = People.objects.all()
-    serializer_class = PeopleSerializer
-
-
-class PeopleAPIUpdate(generics.UpdateAPIView):
-    queryset = People.objects.all()
-    serializer_class = PeopleSerializer
-
-
-class PeopleAPIDetail(generics.RetrieveUpdateDestroyAPIView):
+class PeopleViewSet(viewsets.ModelViewSet):
     queryset = People.objects.all()
     serializer_class = PeopleSerializer
