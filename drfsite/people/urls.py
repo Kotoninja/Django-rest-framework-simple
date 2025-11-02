@@ -1,8 +1,9 @@
-from django.urls import path
+from django.urls import path, include
 from people import views
+from rest_framework import routers
+
+router = routers.SimpleRouter()
+router.register(r"people", views.PeopleViewSet)
 
 
-urlpatterns = [
-    path("people/", views.PeopleViewSet.as_view({"get":"list"})),
-    path("people/<int:pk>/", views.PeopleViewSet.as_view({"put":"update"})),
-]
+urlpatterns = [path("", include(router.urls))]
