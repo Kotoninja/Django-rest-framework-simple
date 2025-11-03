@@ -6,7 +6,8 @@ from django.forms import model_to_dict
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser, IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
 
 from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
 from .models import People, Category
@@ -21,7 +22,8 @@ class PeopleAPIList(generics.ListCreateAPIView):
 class PeopleAPIUpdate(generics.RetrieveUpdateAPIView):
     queryset = People.objects.all()
     serializer_class = PeopleSerializer
-    permission_classes = (IsOwnerOrReadOnly,)
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
 
 
 class PeopleAPIDelete(generics.RetrieveDestroyAPIView):
