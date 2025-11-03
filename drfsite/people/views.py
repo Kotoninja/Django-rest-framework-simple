@@ -1,5 +1,4 @@
 from rest_framework import generics
-from .models import People, Category
 from .serializer import PeopleSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -7,18 +6,25 @@ from django.forms import model_to_dict
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
+
+from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
+from .models import People, Category
 
 
-class PeopleViewSet(viewsets.ModelViewSet):
+class PeopleAPIList(generics.ListCreateAPIView):
     queryset = People.objects.all()
     serializer_class = PeopleSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
-    @action(methods=["get"], detail=True)
-    def category(self, request, pk=None):
-        cat = Category.objects.get(pk=pk)
-        return Response({"cat": cat.name})
 
-    @action(methods=["get"], detail=False)
-    def categories(self, request):
-        cats = Category.objects.all()
-        return Response({"cats": [c.name for c in cats]})
+class PeopleAPIUpdate(generics.RetrieveUpdateAPIView):
+    queryset = People.objects.all()
+    serializer_class = PeopleSerializer
+    permission_classes = (IsOwnerOrReadOnly,)
+
+
+class PeopleAPIDelete(generics.RetrieveDestroyAPIView):
+    queryset = People.objects.all()
+    serializer_class = PeopleSerializer
+    permission_classes = (IsAdminOrReadOnly,)
